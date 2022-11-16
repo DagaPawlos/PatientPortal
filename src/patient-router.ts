@@ -20,9 +20,13 @@ router.post('/patients', async (req, res)=>{
 router.get('/patients',async(req,res)=>{
     let query = req.query.name ? {name: req.query.name} : {};
 
+    let limit=Number(req.query.limit)
+    let skip=Number(req.query.skip)
+ 
+    
     try{
-        const users = await Patient.find(query)
-        res.send(users)
+        const patient = await Patient.find(query,{}, {skip,limit})
+        res.send(patient)
     }catch (e){
         res.status(500).send()
     }
