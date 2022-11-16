@@ -12,8 +12,13 @@ router.post('/patients', async (req, res)=>{
     const isValidOperation = posted.every((post)=>allowedPosts.includes(post))
     
     if(!isValidOperation){
-        return res.status(400).send({error: 'Invalid added'})
+        return res.status(400).send({error: 'Invalid properties present in request body'})
     }
+
+    const findPesel= await Patient.findOne({peselNumber:req.body.peselNumber})
+    if (findPesel){
+        return res.status(409).send({error:'Patient with given pesel is already exist'})   
+     }
 
     try {
         await patient.save()

@@ -24,7 +24,7 @@ export const Patient = mongoose.model('Patient', new mongoose.Schema({
         minlength:11
     },
     phoneNumber: {
-        type: Number,
+        type: String,
         required: true,
         trim:true,
 
