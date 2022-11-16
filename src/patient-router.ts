@@ -1,12 +1,10 @@
-//const express2 = require ('express')
+
 import express from 'express';
-//const Patient1 = require ('./patient')
 import { Patient } from './patient';
 
 export const router = express.Router();
 
 router.post('/patients', async (req, res)=>{
-    const patient = new Patient(req.body)
     const posted = Object.keys(req.body)
     const allowedPosts = ['name','surname','dateOfBirth','peselNumber','phoneNumber','email']
     const isValidOperation = posted.every((post)=>allowedPosts.includes(post))
@@ -14,14 +12,26 @@ router.post('/patients', async (req, res)=>{
     if(!isValidOperation){
         return res.status(400).send({error: 'Invalid properties present in request body'})
     }
-
+    
     const findPesel= await Patient.findOne({peselNumber:req.body.peselNumber})
     if (findPesel){
         return res.status(409).send({error:'Patient with given pesel is already exist'})   
-     }
+    }
+    
+     let name = req.body.name;
 
-    try {
-        await patient.save()
+     interface AgifyResponse {
+         age: number;
+         count: number;
+         name: string;
+        }
+        
+        const response = await fetch('https://api.agify.io?name='+name,{ method:'GET'});
+        const responseJson: AgifyResponse = await response.json();
+        const patient = new Patient({...req.body, age: responseJson.age});
+        
+        try {
+            await patient.save()
         res.status(201).send(patient)
     } catch(e){
         console.log(e)

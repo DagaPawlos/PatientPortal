@@ -23,6 +23,10 @@ export const Patient = mongoose.model('Patient', new mongoose.Schema({
         trim: true,
         minlength:11
     },
+    age: {
+        type: Number,
+        required: true,
+    },
     phoneNumber: {
         type: String,
         required: true,
