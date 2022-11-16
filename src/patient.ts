@@ -20,12 +20,19 @@ export const Patient = mongoose.model('Patient', new mongoose.Schema({
     peselNumber: {
         type: Number,
         required: true,
-        trim: true
+        trim: true,
+        minlength:11
     },
     phoneNumber: {
         type: Number,
         required: true,
-        trim:true
+        trim:true,
+
+        validate(value:string){
+            if(!validator.isMobilePhone(value)){
+                throw new Error ('Number is invalid')
+            }
+        }
     },
     email: {
         type: String,
