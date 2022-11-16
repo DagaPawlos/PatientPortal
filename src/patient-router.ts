@@ -7,6 +7,13 @@ export const router = express.Router();
 
 router.post('/patients', async (req, res)=>{
     const patient = new Patient(req.body)
+    const posted = Object.keys(req.body)
+    const allowedPosts = ['name','surname','dateOfBirth','peselNumber','phoneNumber','email']
+    const isValidOperation = posted.every((post)=>allowedPosts.includes(post))
+    
+    if(!isValidOperation){
+        return res.status(400).send({error: 'Invalid added'})
+    }
 
     try {
         await patient.save()
