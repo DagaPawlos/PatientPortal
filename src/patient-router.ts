@@ -70,7 +70,7 @@ router.get('/patients/:id', async (req,res)=>{
 
 router.patch('/patients/:id',async(req,res)=>{
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name','email','password','age']
+    const allowedUpdates = ['name','email','phoneNumber']
     const isValidOperation = updates.every((update)=>allowedUpdates.includes(update))
     
     if(!isValidOperation){
