@@ -51,5 +51,6 @@ export const Personel = mongoose.model('Personel', new mongoose.Schema({
         lenght:9,
         trim: true,
         required:true
-    }
+    },
+    unit: { type: mongoose.Schema.Types.ObjectId, ref: 'Unit' } // dodac
 }))

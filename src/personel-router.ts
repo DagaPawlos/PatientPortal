@@ -1,11 +1,12 @@
 import express from 'express';
 import {Personel} from './personel';
+import { Unit } from './units';
 
 export const router = express.Router();
 
 router.post('/personel',async(req,res)=>{
     const posted = Object.keys(req.body)
-    const allowedPosts = ['name','surname','occupation','phoneNumber','email','licenseNumber']
+    const allowedPosts = ['name','surname','occupation','phoneNumber','email','licenseNumber','unit']//dodac 
     const isValidOperation = posted.every((post)=>allowedPosts.includes(post))
     
     if(!isValidOperation){
@@ -16,7 +17,10 @@ router.post('/personel',async(req,res)=>{
     if (findLicenseNumber){
         return res.status(409).send({error:'Somebody with given license number is already exist'})   
     }
-    
+
+    const unit = await Unit.findById(req.body.unit); // szukam unitu przez id
+    if (!unit) return res.status(404).send({error: "Unit not found"}) //error
+
     const personel = new Personel(req.body);
 
     try {
@@ -34,9 +38,10 @@ router.get('/personel',async(req,res)=>{
     let skip= Number(req.query.skip)
     
     try{
-        const personel= await Personel.find(query,{},{skip, limit})
+        const personel= await Personel.find(query,{},{skip, limit}).populate('unit') // dodac tu i do get by id
         res.send(personel)
     }catch(e){
+        console.log(e)
         res.status(500).send()
     }
 })
@@ -44,7 +49,7 @@ router.get('/personel',async(req,res)=>{
     router.get('/personel/:id', async (req,res)=>{
         const _id = req.params.id
         try{
-            const personel = await Personel.findById(_id)
+            const personel = await Personel.findById(_id).populate('unit')
             if(!personel){
                 return res.status(404).send()
             }
@@ -86,3 +91,6 @@ router.delete('/personel/:id',async(req,res)=>{
 
 
 })
+
+//tzreba bedzie stworzyc router i model wizyty
+//do tego modelu trzeba bedzie zaczytac model pacjenta i personelu analogicznie do tego 
