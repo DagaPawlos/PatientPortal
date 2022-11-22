@@ -1,4 +1,5 @@
 import express from 'express';
+import { Appointment } from './appointment';
 import { Patient } from './patient';
 
 export const router = express.Router();
@@ -62,6 +63,21 @@ router.get('/patients/:id', async (req, res) => {
     res.send(patient);
   } catch (e) {
     res.status(500).send();
+  }
+});
+
+router.get('/patients/:id/appointments', async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const patient = await Patient.findById(_id);
+    if (!patient) {
+      return res.status(404).send({ error: 'Patient with given id doesnt exist' });
+    }
+    const appointments = await Appointment.find({ patient: patient._id });
+    res.send(appointments);
+  } catch (e) {
+    res.status(500).send({ e: 'Error' });
   }
 });
 
