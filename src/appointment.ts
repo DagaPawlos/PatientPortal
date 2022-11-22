@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
 
-export const Appointment= mongoose.model('Appointment', new mongoose.Schema({
+export const Appointment = mongoose.model(
+  'Appointment',
+  new mongoose.Schema({
     date: {
-        type: Number,
-      required:true
+      type: Number,
+      required: true,
     },
     personel: { type: mongoose.Schema.Types.ObjectId, ref: 'Personel' },
-    patient: {type: mongoose.Schema.Types.ObjectId, ref: 'Patient'} 
-}))
+    patient: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient' },
+  }),
+);
