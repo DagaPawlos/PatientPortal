@@ -1,6 +1,7 @@
 import express from 'express';
 import { Personel } from './personel';
 import { Unit } from './units';
+import { Appointment } from './appointment';
 
 export const router = express.Router();
 
@@ -66,6 +67,22 @@ router.get('/personel/:id', async (req, res) => {
     res.status(500).send();
   }
 });
+
+router.get('/personel/:id/appointments', async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const personel = await Personel.findById(_id);
+    if (!personel) {
+      return res.status(404).send({ error: 'Personel with given id doesnt exist' });
+    }
+    const appointments = await Appointment.find({ personel: personel._id });
+    res.send(appointments);
+  } catch (e) {
+    res.status(500).send({ e: 'Error' });
+  }
+});
+
 router.patch('/personel/:id', async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['surname', 'email', 'phoneNumber'];
