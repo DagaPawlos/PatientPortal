@@ -1,6 +1,12 @@
 import express from 'express';
 import { Appointment } from './appointment';
-import { parseTimestampMonthYear, getFirstDayOfMonth, getLastDayofMonth } from './dateUtilities';
+import {
+  parseTimestampMonthYear,
+  getFirstDayOfMonth,
+  getLastDayofMonth,
+  getFirstDayofYear,
+  getLastDayofYear,
+} from './dateUtilities';
 import { Patient } from './patient';
 import { Personel } from './personel';
 
@@ -32,6 +38,21 @@ router.post('/appointment', async (req, res) => {
       { date: { $lt: lastDayCurrentMonth } },
     ],
   });
+
+  const firstDayCurrentYear = getFirstDayofYear(year);
+  const lastDayCurrentYear = getLastDayofYear(year);
+
+  const visitInYear = await Appointment.find({
+    $and: [
+      { patient: patient._id },
+      { date: { $gt: firstDayCurrentYear } },
+      { date: { $lt: lastDayCurrentYear } },
+    ],
+  });
+
+  if (visitInYear.length >= 5) {
+    return res.status(400).send({ error: 'Too many visits in year' });
+  }
 
   if (visitsInMonth.length >= 3) {
     return res.status(400).send({ error: 'Too many visits in month' });
