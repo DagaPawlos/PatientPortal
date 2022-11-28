@@ -3,11 +3,12 @@ import { Appointment } from './appointment';
 import { Patient } from './patient';
 import { Validator } from './validator';
 import { PATIENT_SCHEMA } from './validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from './routes';
 
 const validator = new Validator();
 export const router = express.Router();
 
-router.post('/patients', async (req, res) => {
+router.post(ROUTES_API.PATIENTS, async (req, res) => {
 const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -40,7 +41,7 @@ const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
   }
 });
 
-router.get('/patients', async (req, res) => {
+router.get(ROUTES_API.PATIENTS, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
 
   const limit = Number(req.query.limit);
@@ -54,7 +55,7 @@ router.get('/patients', async (req, res) => {
   }
 });
 
-router.get('/patients/:id', async (req, res) => {
+router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const patient = await Patient.findById(_id);
@@ -67,7 +68,7 @@ router.get('/patients/:id', async (req, res) => {
   }
 });
 
-router.get('/patients/:id/appointments', async (req, res) => {
+router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`, async (req, res) => {
   const _id = req.params.id;
 
   try {
@@ -82,7 +83,7 @@ router.get('/patients/:id/appointments', async (req, res) => {
   }
 });
 
-router.patch('/patients/:id', async (req, res) => {
+router.patch(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -103,7 +104,7 @@ router.patch('/patients/:id', async (req, res) => {
   }
 });
 
-router.delete('/patients/:id', async (req, res) => {
+router.delete(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const patient = await Patient.findByIdAndDelete(req.params.id);
     if (!patient) {

@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 
 enum Occupation {
-  doctor = 'doctor',
-  midwife = 'midwife',
-  nurse = 'nurse',
-  medical_analyst = 'medical analyst',
+  DOCTOR = 'doctor',
+  MIDWIFE = 'midwife',
+  NURSE = 'nurse',
+  MEDICAL_ANALYST = 'medical analyst',
 }
 
 export const Personel = mongoose.model(

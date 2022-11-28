@@ -5,11 +5,12 @@ import { Appointment } from './appointment';
 import { Validator } from './validator';
 import { PERSONEL_SCHEMA_CREATE } from './validationSchemas';
 import { PERSONEL_SCHEMA_UPDATE } from './validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from './routes';
 
 export const router = express.Router();
 const validator = new Validator();
 
-router.post('/personel', async (req, res) => {
+router.post(ROUTES_API.PERSONEL, async (req, res) => {
  const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_CREATE);
 
   if (!isValidOperation) {
@@ -35,7 +36,7 @@ router.post('/personel', async (req, res) => {
   }
 });
 
-router.get('/personel', async (req, res) => {
+router.get(ROUTES_API.PERSONEL, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
   const limit = Number(req.query.limit);
   const skip = Number(req.query.skip);
@@ -49,7 +50,7 @@ router.get('/personel', async (req, res) => {
   }
 });
 
-router.get('/personel/:id', async (req, res) => {
+router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const personel = await Personel.findById(_id).populate('unit');
@@ -62,7 +63,7 @@ router.get('/personel/:id', async (req, res) => {
   }
 });
 
-router.get('/personel/:id/appointments', async (req, res) => {
+router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`, async (req, res) => {
   const _id = req.params.id;
 
   try {
@@ -77,7 +78,7 @@ router.get('/personel/:id/appointments', async (req, res) => {
   }
 });
 
-router.patch('/personel/:id', async (req, res) => {
+router.patch(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_UPDATE);
 
   if (!isValidOperation) {
@@ -98,7 +99,7 @@ router.patch('/personel/:id', async (req, res) => {
   }
 });
 
-router.delete('/personel/:id', async (req, res) => {
+router.delete(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const personel = await Personel.findByIdAndDelete(req.params.id);
     if (!personel) {
