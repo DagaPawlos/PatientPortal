@@ -1,14 +1,10 @@
 import express from 'express';
 import { Appointment } from './appointment';
-import {
-  parseTimestampMonthYear,
-  getFirstDayOfMonth,
-  getLastDayofMonth,
-  getFirstDayofYear,
-  getLastDayofYear,
-} from './dateUtilities';
+import { DateUtilities } from './dateUtilities';
 import { Patient } from './patient';
 import { Personel } from './personel';
+
+const dateUtilities = new DateUtilities();
 
 export const router = express.Router();
 
@@ -27,9 +23,9 @@ router.post('/appointment', async (req, res) => {
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
 
-  const { month, year } = parseTimestampMonthYear(req.body.date);
-  const firstDayCurrentMonth = getFirstDayOfMonth(year, month);
-  const lastDayCurrentMonth = getLastDayofMonth(year, month);
+  const { month, year } = dateUtilities.parseTimestampMonthYear(req.body.date);
+  const firstDayCurrentMonth = dateUtilities.getFirstDayOfMonth(year, month);
+  const lastDayCurrentMonth = dateUtilities.getLastDayofMonth(year, month);
 
   const visitsInMonth = await Appointment.find({
     $and: [
@@ -39,8 +35,8 @@ router.post('/appointment', async (req, res) => {
     ],
   });
 
-  const firstDayCurrentYear = getFirstDayofYear(year);
-  const lastDayCurrentYear = getLastDayofYear(year);
+  const firstDayCurrentYear = dateUtilities.getFirstDayofYear(year);
+  const lastDayCurrentYear = dateUtilities.getLastDayofYear(year);
 
   const visitInYear = await Appointment.find({
     $and: [
@@ -111,11 +107,11 @@ router.patch('/appointment/:id', async (req, res) => {
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
 
-  const { year, month } = parseTimestampMonthYear(req.body.date);
+  const { year, month } = dateUtilities.parseTimestampMonthYear(req.body.date);
 
-  const firstDayCurrentMonth = getFirstDayOfMonth(year, month);
+  const firstDayCurrentMonth = dateUtilities.getFirstDayOfMonth(year, month);
 
-  const lastDayCurrentMonth = getLastDayofMonth(year, month);
+  const lastDayCurrentMonth = dateUtilities.getLastDayofMonth(year, month);
 
   const visitsInMonth = await Appointment.find({
     $and: [
