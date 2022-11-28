@@ -3,15 +3,16 @@ import { Appointment } from './appointment';
 import { DateUtilities } from './dateUtilities';
 import { Patient } from './patient';
 import { Personel } from './personel';
+import { Validator } from './validator';
+import { APPOINTMENT_SCHEMA } from './validationSchemas';
 
+const validator = new Validator();
 const dateUtilities = new DateUtilities();
 
 export const router = express.Router();
 
-router.post('/appointment', async (req, res) => {
-  const posted = Object.keys(req.body);
-  const allowedPosts = ['date', 'patient', 'personel'];
-  const isValidOperation = posted.every((post) => allowedPosts.includes(post));
+router.post('/appointments', async (req, res) => {
+  const isValidOperation = validator.validate(req.body, APPOINTMENT_SCHEMA);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid properties present in request body' });
@@ -65,7 +66,7 @@ router.post('/appointment', async (req, res) => {
   }
 });
 
-router.get('/appointment', async (req, res) => {
+router.get('/appointments', async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
   const limit = Number(req.query.limit);
   const skip = Number(req.query.skip);
@@ -80,7 +81,7 @@ router.get('/appointment', async (req, res) => {
   }
 });
 
-router.get('/appointment/:id', async (req, res) => {
+router.get('/appointments/:id', async (req, res) => {
   const _id = req.params.id;
   try {
     const appointment = await Appointment.findById(_id).populate('personel').populate('patient');
@@ -92,10 +93,9 @@ router.get('/appointment/:id', async (req, res) => {
     res.status(500).send();
   }
 });
-router.patch('/appointment/:id', async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['date', 'personel', 'patient'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+router.patch('/appointments/:id', async (req, res) => {
+  const isValidOperation = validator.validate(req.body, APPOINTMENT_SCHEMA);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid updates' });
@@ -139,7 +139,7 @@ router.patch('/appointment/:id', async (req, res) => {
   }
 });
 
-router.delete('/appointment/:id', async (req, res) => {
+router.delete('/appointments/:id', async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
     if (!appointment) {

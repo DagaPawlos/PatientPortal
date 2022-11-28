@@ -1,12 +1,14 @@
 import express from 'express';
 import { Unit } from './units';
+import { Validator } from './validator';
+import { UNITS_SCHEMA } from './validationSchemas';
+
+const validator = new Validator();
 
 export const router = express.Router();
 
 router.post('/units', async (req, res) => {
-  const posted = Object.keys(req.body);
-  const allowedPosts = ['name', 'floor'];
-  const isValidOperation = posted.every((post) => allowedPosts.includes(post));
+  const isValidOperation = validator.validate(req.body, UNITS_SCHEMA);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid properties present in request body' });
@@ -41,7 +43,7 @@ router.get('/units', async (req, res) => {
   }
 });
 
-router.get('/unit/:id', async (req, res) => {
+router.get('/units/:id', async (req, res) => {
   const _id = req.params.id;
   try {
     const unit = await Unit.findById(_id);
@@ -53,10 +55,8 @@ router.get('/unit/:id', async (req, res) => {
     res.status(500).send();
   }
 });
-router.patch('/unit/:id', async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'floor'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+router.patch('/units/:id', async (req, res) => {
+  const isValidOperation = validator.validate(req.body, UNITS_SCHEMA);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid updates' });
@@ -76,7 +76,7 @@ router.patch('/unit/:id', async (req, res) => {
   }
 });
 
-router.delete('/unit/:id', async (req, res) => {
+router.delete('/units/:id', async (req, res) => {
   try {
     const unit = await Unit.findByIdAndDelete(req.params.id);
     if (!unit) {

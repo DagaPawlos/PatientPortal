@@ -2,21 +2,15 @@ import express from 'express';
 import { Personel } from './personel';
 import { Unit } from './units';
 import { Appointment } from './appointment';
+import { Validator } from './validator';
+import { PERSONEL_SCHEMA_CREATE } from './validationSchemas';
+import { PERSONEL_SCHEMA_UPDATE } from './validationSchemas';
 
 export const router = express.Router();
+const validator = new Validator();
 
 router.post('/personel', async (req, res) => {
-  const posted = Object.keys(req.body);
-  const allowedPosts = [
-    'name',
-    'surname',
-    'occupation',
-    'phoneNumber',
-    'email',
-    'licenseNumber',
-    'unit',
-  ];
-  const isValidOperation = posted.every((post) => allowedPosts.includes(post));
+ const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_CREATE);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid properties present in request body' });
@@ -84,9 +78,7 @@ router.get('/personel/:id/appointments', async (req, res) => {
 });
 
 router.patch('/personel/:id', async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['surname', 'email', 'phoneNumber'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_UPDATE);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid updates' });
