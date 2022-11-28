@@ -9,7 +9,7 @@ const validator = new Validator();
 export const router = express.Router();
 
 router.post(ROUTES_API.PATIENTS, async (req, res) => {
-const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
+  const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid properties present in request body' });
@@ -68,20 +68,23 @@ router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`, async (req, res) => {
-  const _id = req.params.id;
+router.get(
+  `${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`,
+  async (req, res) => {
+    const _id = req.params.id;
 
-  try {
-    const patient = await Patient.findById(_id);
-    if (!patient) {
-      return res.status(404).send({ error: 'Patient with given id doesnt exist' });
+    try {
+      const patient = await Patient.findById(_id);
+      if (!patient) {
+        return res.status(404).send({ error: 'Patient with given id doesnt exist' });
+      }
+      const appointments = await Appointment.find({ patient: patient._id });
+      res.send(appointments);
+    } catch (e) {
+      res.status(500).send({ e: 'Error' });
     }
-    const appointments = await Appointment.find({ patient: patient._id });
-    res.send(appointments);
-  } catch (e) {
-    res.status(500).send({ e: 'Error' });
-  }
-});
+  },
+);
 
 router.patch(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);

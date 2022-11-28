@@ -7,7 +7,6 @@ import { Validator } from './validator';
 import { APPOINTMENT_SCHEMA } from './validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from './routes';
 
-
 const validator = new Validator();
 const dateUtilities = new DateUtilities();
 

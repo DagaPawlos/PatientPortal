@@ -11,7 +11,7 @@ export const router = express.Router();
 const validator = new Validator();
 
 router.post(ROUTES_API.PERSONEL, async (req, res) => {
- const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_CREATE);
+  const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_CREATE);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: 'Invalid properties present in request body' });
@@ -63,20 +63,23 @@ router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`, async (req, res) => {
-  const _id = req.params.id;
+router.get(
+  `${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`,
+  async (req, res) => {
+    const _id = req.params.id;
 
-  try {
-    const personel = await Personel.findById(_id);
-    if (!personel) {
-      return res.status(404).send({ error: 'Personel with given id doesnt exist' });
+    try {
+      const personel = await Personel.findById(_id);
+      if (!personel) {
+        return res.status(404).send({ error: 'Personel with given id doesnt exist' });
+      }
+      const appointments = await Appointment.find({ personel: personel._id });
+      res.send(appointments);
+    } catch (e) {
+      res.status(500).send({ e: 'Error' });
     }
-    const appointments = await Appointment.find({ personel: personel._id });
-    res.send(appointments);
-  } catch (e) {
-    res.status(500).send({ e: 'Error' });
-  }
-});
+  },
+);
 
 router.patch(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_UPDATE);
