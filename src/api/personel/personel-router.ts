@@ -1,11 +1,11 @@
 import express from 'express';
 import { Personel } from './personel';
-import { Unit } from './units';
-import { Appointment } from './appointment';
-import { Validator } from './validator';
-import { PERSONEL_SCHEMA_CREATE } from './validationSchemas';
-import { PERSONEL_SCHEMA_UPDATE } from './validationSchemas';
-import { ROUTES_API, ROUTE_PARAMS } from './routes';
+import { Unit } from '../unit/units';
+import { Appointment } from '../appointment/appointment';
+import { Validator } from '../../validator/validator';
+import { PERSONEL_SCHEMA_CREATE } from '../../validator/validationSchemas';
+import { PERSONEL_SCHEMA_UPDATE } from '../../validator/validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 export const router = express.Router();
 const validator = new Validator();

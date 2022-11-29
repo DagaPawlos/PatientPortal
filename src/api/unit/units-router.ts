@@ -1,8 +1,8 @@
 import express from 'express';
 import { Unit } from './units';
-import { Validator } from './validator';
-import { UNITS_SCHEMA } from './validationSchemas';
-import { ROUTES_API, ROUTE_PARAMS } from './routes';
+import { Validator } from '../../validator/validator';
+import { UNITS_SCHEMA } from '../../validator/validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 const validator = new Validator();
 

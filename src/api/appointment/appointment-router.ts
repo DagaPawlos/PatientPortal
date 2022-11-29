@@ -1,11 +1,11 @@
 import express from 'express';
 import { Appointment } from './appointment';
-import { DateUtilities } from './dateUtilities';
-import { Patient } from './patient';
-import { Personel } from './personel';
-import { Validator } from './validator';
-import { APPOINTMENT_SCHEMA } from './validationSchemas';
-import { ROUTES_API, ROUTE_PARAMS } from './routes';
+import { DateUtilities } from '../../dateUtilities';
+import { Patient } from '../patient/patient';
+import { Personel } from '../personel/personel';
+import { Validator } from '../../validator/validator';
+import { APPOINTMENT_SCHEMA } from '../../validator/validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 const validator = new Validator();
 const dateUtilities = new DateUtilities();

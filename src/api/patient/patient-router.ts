@@ -1,9 +1,9 @@
 import express from 'express';
-import { Appointment } from './appointment';
+import { Appointment } from '../appointment/appointment';
 import { Patient } from './patient';
-import { Validator } from './validator';
-import { PATIENT_SCHEMA } from './validationSchemas';
-import { ROUTES_API, ROUTE_PARAMS } from './routes';
+import { Validator } from '../../validator/validator';
+import { PATIENT_SCHEMA } from '../../validator/validationSchemas';
+import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 const validator = new Validator();
 export const router = express.Router();

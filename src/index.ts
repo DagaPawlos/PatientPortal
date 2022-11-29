@@ -1,8 +1,8 @@
 import express from 'express';
-import { router as patientRouter } from './patient-router';
-import { router as personelRouter } from './personel-router';
-import { router as unitsRouter } from './units-router';
-import { router as appointmentRouter } from './appointment-router';
+import { router as patientRouter } from './api/patient/patient-router';
+import { router as personelRouter } from './api/personel/personel-router';
+import { router as unitsRouter } from './api/unit/units-router';
+import { router as appointmentRouter } from './api/appointment/appointment-router';
 import mongoose from 'mongoose';
 
 mongoose.connect('mongodb://127.0.0.1:27017/patient-portal', {});
