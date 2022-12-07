@@ -26,17 +26,7 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
 
   const { month, year } = dateUtilities.parseTimestampMonthYear(req.body.date);
-  const firstDayCurrentMonth = dateUtilities.getFirstDayOfMonth(year, month);
-  const lastDayCurrentMonth = dateUtilities.getLastDayofMonth(year, month);
-
-  const visitsInMonth = await Appointment.find({
-    $and: [
-      { patient: patient._id },
-      { date: { $gt: firstDayCurrentMonth } },
-      { date: { $lt: lastDayCurrentMonth } },
-    ],
-  });
-
+ 
   const firstDayCurrentYear = dateUtilities.getFirstDayofYear(year);
   const lastDayCurrentYear = dateUtilities.getLastDayofYear(year);
 
@@ -51,6 +41,17 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
   if (visitInYear.length >= 5) {
     return res.status(400).send({ error: 'Too many visits in year' });
   }
+
+  const firstDayCurrentMonth = dateUtilities.getFirstDayOfMonth(year, month);
+  const lastDayCurrentMonth = dateUtilities.getLastDayofMonth(year, month);
+
+  const visitsInMonth = await Appointment.find({
+    $and: [
+      { patient: patient._id },
+      { date: { $gt: firstDayCurrentMonth } },
+      { date: { $lt: lastDayCurrentMonth } },
+    ],
+  });
 
   if (visitsInMonth.length >= 3) {
     return res.status(400).send({ error: 'Too many visits in month' });
