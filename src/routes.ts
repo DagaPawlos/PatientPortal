@@ -3,8 +3,11 @@ export enum ROUTES_API {
   UNITS = '/units',
   PATIENTS = '/patients',
   APPOINTMENTS = '/appointments',
+  STATISTICS = '/statistics',
 }
 
 export enum ROUTE_PARAMS {
   ID = '/:id',
+  YEAR = '/:year',
+  MONTH = '/:month',
 }

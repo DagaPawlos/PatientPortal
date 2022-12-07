@@ -26,7 +26,7 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
 
   const { month, year } = dateUtilities.parseTimestampMonthYear(req.body.date);
- 
+
   const firstDayCurrentYear = dateUtilities.getFirstDayofYear(year);
   const lastDayCurrentYear = dateUtilities.getLastDayofYear(year);
 
