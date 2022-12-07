@@ -84,7 +84,7 @@ router.get(
   },
 );
 router.get(
-  `${ROUTES_API.STATISTICS}${ROUTE_PARAMS.MONTH}${ROUTE_PARAMS.YEAR}`,
+  `${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}${ROUTE_PARAMS.MONTH}`,
   async (req, res) => {
     const year = Number(req.params.year);
     const month = Number(req.params.month) - 1;
