@@ -83,6 +83,7 @@ router.get(
     }
   },
 );
+
 router.get(
   `${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}${ROUTE_PARAMS.MONTH}`,
   async (req, res) => {
@@ -104,6 +105,7 @@ router.get(
     }
   },
 );
+
 router.get(`${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}`, async (req, res) => {
   const year = Number(req.params.year);
   const firstDayOfYear = dateUtilities.getFirstDayofYear(year);
