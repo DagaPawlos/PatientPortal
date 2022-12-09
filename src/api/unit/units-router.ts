@@ -6,9 +6,9 @@ import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 const validator = new Validator();
 
-export const router = express.Router();
+export const unitsRouter = express.Router();
 
-router.post(ROUTES_API.UNITS, async (req, res) => {
+unitsRouter.post(ROUTES_API.UNITS, async (req, res) => {
   const isValidOperation = validator.validate(req.body, UNITS_SCHEMA);
 
   if (!isValidOperation) {
@@ -31,7 +31,7 @@ router.post(ROUTES_API.UNITS, async (req, res) => {
   }
 });
 
-router.get(ROUTES_API.UNITS, async (req, res) => {
+unitsRouter.get(ROUTES_API.UNITS, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
   const limit = Number(req.query.limit);
   const skip = Number(req.query.skip);
@@ -44,7 +44,7 @@ router.get(ROUTES_API.UNITS, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+unitsRouter.get(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const unit = await Unit.findById(_id);
@@ -57,7 +57,7 @@ router.get(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.patch(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+unitsRouter.patch(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, UNITS_SCHEMA);
 
   if (!isValidOperation) {
@@ -78,7 +78,7 @@ router.patch(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.delete(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+unitsRouter.delete(`${ROUTES_API.UNITS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const unit = await Unit.findByIdAndDelete(req.params.id);
     if (!unit) {

@@ -1,11 +1,11 @@
 import express from 'express';
-import { router as patientRouter } from './api/patient/patient-router';
-import { router as personelRouter } from './api/personel/personel-router';
-import { router as unitsRouter } from './api/unit/units-router';
-import { router as appointmentRouter } from './api/appointment/appointment-router';
+import { patientRouter } from './api/patient/patient-router';
+import { personelRouter } from './api/personel/personel-router';
+import { unitsRouter } from './api/unit/units-router';
+import { appointmentRouter } from './api/appointment/appointment-router';
 import mongoose from 'mongoose';
-import { router as statisticsRouter } from './api/statistics/statistics-router';
-import { router as blocked_daysRouter } from './api/blockedDays/blockedDays-router';
+import { staticticsRouter } from './api/statistics/statistics-router';
+import {blockedDaysRouter} from './api/blockedDays/blockedDays-router'
 
 mongoose.connect('mongodb://127.0.0.1:27017/patient-portal', {});
 
@@ -18,7 +18,7 @@ app.use(personelRouter);
 app.use(unitsRouter);
 app.use(appointmentRouter);
 app.use(statisticsRouter);
-app.use(blocked_daysRouter);
+app.use(blockedDaysRouter);
 
 app.listen(port, () => {
   console.log('Server is up on port ' + port);

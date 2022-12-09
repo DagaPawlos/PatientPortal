@@ -5,10 +5,10 @@ import { BLOCKED_DAYS_SCHEMA_CREATE } from '../../validator/validationSchemas';
 import { Validator } from '../../validator/validator';
 import { Personel } from '../personel/personel';
 
-export const router = express.Router();
+export const blockedDaysRouter = express.Router();
 const validator = new Validator();
 
-router.post(ROUTES_API.BLOCKED_DAYS, async (req, res) => {
+blockedDaysRouter.post(ROUTES_API.BLOCKED_DAYS, async (req, res) => {
   const isValidOperation = validator.validate(req.body, BLOCKED_DAYS_SCHEMA_CREATE);
 
   if (!isValidOperation) {

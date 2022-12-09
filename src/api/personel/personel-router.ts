@@ -7,10 +7,10 @@ import { PERSONEL_SCHEMA_CREATE } from '../../validator/validationSchemas';
 import { PERSONEL_SCHEMA_UPDATE } from '../../validator/validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
-export const router = express.Router();
+export const personelRouter = express.Router();
 const validator = new Validator();
 
-router.post(ROUTES_API.PERSONEL, async (req, res) => {
+personelRouter.post(ROUTES_API.PERSONEL, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_CREATE);
 
   if (!isValidOperation) {
@@ -36,7 +36,7 @@ router.post(ROUTES_API.PERSONEL, async (req, res) => {
   }
 });
 
-router.get(ROUTES_API.PERSONEL, async (req, res) => {
+personelRouter.get(ROUTES_API.PERSONEL, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
   const limit = Number(req.query.limit);
   const skip = Number(req.query.skip);
@@ -50,7 +50,7 @@ router.get(ROUTES_API.PERSONEL, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
+personelRouter.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const personel = await Personel.findById(_id).populate('unit');
@@ -63,7 +63,7 @@ router.get(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.get(
+personelRouter.get(
   `${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`,
   async (req, res) => {
     const _id = req.params.id;
@@ -81,7 +81,7 @@ router.get(
   },
 );
 
-router.patch(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
+personelRouter.patch(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PERSONEL_SCHEMA_UPDATE);
 
   if (!isValidOperation) {
@@ -102,7 +102,7 @@ router.patch(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.delete(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
+personelRouter.delete(`${ROUTES_API.PERSONEL}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const personel = await Personel.findByIdAndDelete(req.params.id);
     if (!personel) {
