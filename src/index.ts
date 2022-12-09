@@ -5,7 +5,7 @@ import { unitsRouter } from './api/unit/units-router';
 import { appointmentRouter } from './api/appointment/appointment-router';
 import mongoose from 'mongoose';
 import { staticticsRouter } from './api/statistics/statistics-router';
-import {blockedDaysRouter} from './api/blockedDays/blockedDays-router'
+import { blockedDaysRouter } from './api/blockedDays/blockedDays-router';
 
 mongoose.connect('mongodb://127.0.0.1:27017/patient-portal', {});
 
@@ -17,7 +17,7 @@ app.use(patientRouter);
 app.use(personelRouter);
 app.use(unitsRouter);
 app.use(appointmentRouter);
-app.use(statisticsRouter);
+app.use(staticticsRouter);
 app.use(blockedDaysRouter);
 
 app.listen(port, () => {

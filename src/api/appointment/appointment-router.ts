@@ -116,6 +116,12 @@ appointmentRouter.patch(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (r
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
 
+  const blockedDay = await BlockedDays.findOne({
+    personel: personel._id,
+    date: req.body.date,
+  });
+  if (blockedDay) return res.status(400).send({ error: 'This date is blocked' });
+
   const { year, month } = dateUtilities.parseTimestampMonthYear(req.body.date);
 
   const firstDayCurrentMonth = dateUtilities.getFirstDayOfMonth(year, month);
