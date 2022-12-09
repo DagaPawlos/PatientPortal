@@ -6,6 +6,7 @@ import { Personel } from '../personel/personel';
 import { Validator } from '../../validator/validator';
 import { APPOINTMENT_SCHEMA } from '../../validator/validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
+import { BlockedDays } from '../blocked_days/blockedDays';
 
 const validator = new Validator();
 const dateUtilities = new DateUtilities();
@@ -24,6 +25,12 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
 
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
+
+  const blockedDay = await BlockedDays.findOne({
+    personel: personel._id,
+    date: req.body.date,
+  });
+  if (blockedDay) return res.status(400).send({ error: 'This date is blocked' });
 
   const { month, year } = dateUtilities.parseTimestampMonthYear(req.body.date);
 
