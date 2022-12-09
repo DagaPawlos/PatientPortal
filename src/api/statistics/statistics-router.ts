@@ -6,9 +6,9 @@ import { Appointment } from '../appointment/appointment';
 
 const dateUtilities = new DateUtilities();
 
-export const router = express.Router();
+export const statisticsRouter = express.Router();
 
-router.get(
+statisticsRouter.get(
   `${ROUTES_API.STATISTICS}${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTE_PARAMS.YEAR}${ROUTE_PARAMS.MONTH}`,
   async (req, res) => {
     const _id = req.params.id;
@@ -40,7 +40,7 @@ router.get(
   },
 );
 
-router.get(
+statisticsRouter.get(
   `${ROUTES_API.STATISTICS}${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTE_PARAMS.YEAR}`,
   async (req, res) => {
     const _id = req.params.id;
@@ -83,7 +83,8 @@ router.get(
     }
   },
 );
-router.get(
+
+statisticsRouter.get(
   `${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}${ROUTE_PARAMS.MONTH}`,
   async (req, res) => {
     const year = Number(req.params.year);
@@ -104,7 +105,8 @@ router.get(
     }
   },
 );
-router.get(`${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}`, async (req, res) => {
+
+statisticsRouter.get(`${ROUTES_API.STATISTICS}${ROUTE_PARAMS.YEAR}`, async (req, res) => {
   const year = Number(req.params.year);
   const firstDayOfYear = dateUtilities.getFirstDayofYear(year);
   const lastDayOfYear = dateUtilities.getLastDayofYear(year);

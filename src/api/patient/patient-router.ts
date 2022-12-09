@@ -6,9 +6,9 @@ import { PATIENT_SCHEMA } from '../../validator/validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 
 const validator = new Validator();
-export const router = express.Router();
+export const patientRouter = express.Router();
 
-router.post(ROUTES_API.PATIENTS, async (req, res) => {
+patientRouter.post(ROUTES_API.PATIENTS, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -41,7 +41,7 @@ router.post(ROUTES_API.PATIENTS, async (req, res) => {
   }
 });
 
-router.get(ROUTES_API.PATIENTS, async (req, res) => {
+patientRouter.get(ROUTES_API.PATIENTS, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
 
   const limit = Number(req.query.limit);
@@ -55,7 +55,7 @@ router.get(ROUTES_API.PATIENTS, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+patientRouter.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const patient = await Patient.findById(_id);
@@ -68,7 +68,7 @@ router.get(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.get(
+patientRouter.get(
   `${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}${ROUTES_API.APPOINTMENTS}`,
   async (req, res) => {
     const _id = req.params.id;
@@ -86,7 +86,7 @@ router.get(
   },
 );
 
-router.patch(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+patientRouter.patch(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, PATIENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -107,7 +107,7 @@ router.patch(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.delete(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+patientRouter.delete(`${ROUTES_API.PATIENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const patient = await Patient.findByIdAndDelete(req.params.id);
     if (!patient) {

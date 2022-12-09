@@ -6,13 +6,14 @@ import { Personel } from '../personel/personel';
 import { Validator } from '../../validator/validator';
 import { APPOINTMENT_SCHEMA } from '../../validator/validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
+import { BlockedDays } from '../blockedDays/blockedDays';
 
 const validator = new Validator();
 const dateUtilities = new DateUtilities();
 
-export const router = express.Router();
+export const appointmentRouter = express.Router();
 
-router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
+appointmentRouter.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
   const isValidOperation = validator.validate(req.body, APPOINTMENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -24,6 +25,12 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
 
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
+
+  const blockedDay = await BlockedDays.findOne({
+    personel: personel._id,
+    date: req.body.date,
+  });
+  if (blockedDay) return res.status(400).send({ error: 'This date is blocked' });
 
   const { month, year } = dateUtilities.parseTimestampMonthYear(req.body.date);
 
@@ -68,7 +75,7 @@ router.post(ROUTES_API.APPOINTMENTS, async (req, res) => {
   }
 });
 
-router.get(ROUTES_API.APPOINTMENTS, async (req, res) => {
+appointmentRouter.get(ROUTES_API.APPOINTMENTS, async (req, res) => {
   const query = req.query.name ? { name: req.query.name } : {};
   const limit = Number(req.query.limit);
   const skip = Number(req.query.skip);
@@ -83,7 +90,7 @@ router.get(ROUTES_API.APPOINTMENTS, async (req, res) => {
   }
 });
 
-router.get(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+appointmentRouter.get(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const _id = req.params.id;
   try {
     const appointment = await Appointment.findById(_id).populate('personel').populate('patient');
@@ -96,7 +103,7 @@ router.get(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   }
 });
 
-router.patch(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+appointmentRouter.patch(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   const isValidOperation = validator.validate(req.body, APPOINTMENT_SCHEMA);
 
   if (!isValidOperation) {
@@ -108,6 +115,12 @@ router.patch(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) =>
 
   const personel = await Personel.findById(req.body.personel);
   if (!personel) return res.status(404).send({ error: 'Personel not found' });
+
+  const blockedDay = await BlockedDays.findOne({
+    personel: personel._id,
+    date: req.body.date,
+  });
+  if (blockedDay) return res.status(400).send({ error: 'This date is blocked' });
 
   const { year, month } = dateUtilities.parseTimestampMonthYear(req.body.date);
 
@@ -141,7 +154,7 @@ router.patch(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) =>
   }
 });
 
-router.delete(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
+appointmentRouter.delete(`${ROUTES_API.APPOINTMENTS}${ROUTE_PARAMS.ID}`, async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
     if (!appointment) {

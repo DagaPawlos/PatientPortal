@@ -22,3 +22,5 @@ export const PERSONEL_SCHEMA_CREATE = [
 export const PERSONEL_SCHEMA_UPDATE = ['surname', 'email', 'phoneNumber'];
 
 export const UNITS_SCHEMA = ['name', 'floor'];
+
+export const BLOCKED_DAYS_SCHEMA_CREATE = ['date', 'personel'];
