@@ -6,7 +6,7 @@ import { Personel } from '../personel/personel';
 import { Validator } from '../../validator/validator';
 import { APPOINTMENT_SCHEMA } from '../../validator/validationSchemas';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
-import { BlockedDays } from '../blocked_days/blockedDays';
+import { BlockedDays } from '../blockedDays/blockedDays';
 
 const validator = new Validator();
 const dateUtilities = new DateUtilities();

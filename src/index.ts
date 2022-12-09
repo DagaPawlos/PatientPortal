@@ -5,7 +5,7 @@ import { router as unitsRouter } from './api/unit/units-router';
 import { router as appointmentRouter } from './api/appointment/appointment-router';
 import mongoose from 'mongoose';
 import { router as statisticsRouter } from './api/statistics/statistics-router';
-import { router as blocked_daysRouter } from './api/blocked_days/blockedDays-router';
+import { router as blocked_daysRouter } from './api/blockedDays/blockedDays-router';
 
 mongoose.connect('mongodb://127.0.0.1:27017/patient-portal', {});
 
