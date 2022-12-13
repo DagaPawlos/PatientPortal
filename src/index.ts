@@ -6,6 +6,7 @@ import { appointmentRouter } from './api/appointment/appointment-router';
 import mongoose from 'mongoose';
 import { statisticsRouter } from './api/statistics/statistics-router';
 import { blockedDaysRouter } from './api/blockedDays/blockedDays-router';
+import { reportsRouter } from './api/reports/reports-router';
 
 mongoose.connect('mongodb://127.0.0.1:27017/patient-portal', {});
 
@@ -19,6 +20,7 @@ app.use(unitsRouter);
 app.use(appointmentRouter);
 app.use(statisticsRouter);
 app.use(blockedDaysRouter);
+app.use(reportsRouter);
 
 app.listen(port, () => {
   console.log('Server is up on port ' + port);

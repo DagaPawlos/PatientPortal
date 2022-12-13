@@ -5,6 +5,7 @@ export enum ROUTES_API {
   APPOINTMENTS = '/appointments',
   STATISTICS = '/statistics',
   BLOCKED_DAYS = '/blocked-days',
+  REPORTS = '/reports',
 }
 
 export enum ROUTE_PARAMS {
