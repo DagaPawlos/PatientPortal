@@ -3,6 +3,7 @@ import express from 'express';
 import { ROUTES_API, ROUTE_PARAMS } from '../../routes';
 import { DateUtilities } from '../../dateUtilities';
 import { Unit } from '../unit/units';
+import { Types } from 'mongoose';
 
 const dateUtilities = new DateUtilities();
 
@@ -27,20 +28,39 @@ reportsRouter.get(
       .populate({
         path: 'patient',
         select: ['name', 'surname'],
-      })) as any[];
+      })
+      .sort({ date: -1 })) as any[];
+
+    const unitsIds: Types.ObjectId[] = [];
+
+    for (let i = 0; i < appointments.length; i++) {
+      const unit = appointments[i];
+      if (unit.personel.unit !== undefined && !unitsIds.includes(unit.personel.unit)) {
+        unitsIds.push(unit.personel.unit);
+      }
+    }
+
+    const units = await Unit.find({ _id: { $in: unitsIds } });
 
     const appointmentReports = [];
 
     for (let i = 0; i < appointments.length; i++) {
       const appointment = appointments[i];
-      const unit = await Unit.findById(appointment.personel.unit);
+
+      const unit = units.find((unit) => {
+        if (appointment.personel.unit) {
+          return unit._id.toString() == appointment.personel?.unit.toString();
+        }
+        return false;
+      });
+      const unitName = unit?.name;
 
       const appointmentReport = {
-        date: new Date(appointment.date).toJSON().slice(0, 10).replace(/-/g, '/'),
-        time: new Date(appointment.date).toLocaleTimeString(),
+        date: dateUtilities.getDateString(appointment.date),
+        time: dateUtilities.getTimeString(appointment.date),
         personel: appointment.personel.name + ' ' + appointment.personel.surname,
         patient: appointment.patient.name + ' ' + appointment.patient.surname,
-        unit: unit?.name,
+        unit: unitName,
       };
 
       appointmentReports.push(appointmentReport);

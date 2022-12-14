@@ -21,4 +21,12 @@ export class DateUtilities {
   public getLastDayofYear(year: number) {
     return new Date(year, 11, 31).getTime();
   }
+
+  public getDateString(timestamp: number) {
+    return new Date(timestamp).toJSON().slice(0, 10).replace(/-/g, '/');
+  }
+
+  public getTimeString(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString();
+  }
 }
